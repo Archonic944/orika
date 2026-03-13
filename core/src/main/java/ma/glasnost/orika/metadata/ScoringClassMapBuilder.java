@@ -273,8 +273,8 @@ public class ScoringClassMapBuilder<A, B> extends ClassMapBuilder<A, B> {
         Set<String> unmatchedFields = new LinkedHashSet<>(this.getPropertiesForTypeA());
         unmatchedFields.remove("class");
         
-        for (FieldMatchScore score : matchScores) {
-            
+        while (!matchScores.isEmpty()) {
+            FieldMatchScore score = matchScores.poll();
             if (!this.getMappedPropertiesForTypeA().contains(score.propertyA.getExpression())
                     && !this.getMappedPropertiesForTypeB().contains(score.propertyB.getExpression())) {
                 if (LOGGER.isTraceEnabled()) {
@@ -490,7 +490,8 @@ public class ScoringClassMapBuilder<A, B> extends ClassMapBuilder<A, B> {
             }
             
             double score = 0.0d;
-            for (WordPair w: orderedPairs) {
+            while (!orderedPairs.isEmpty()) {
+                WordPair w = orderedPairs.poll();
                 if (aWordsRemaining.contains(w.aWord) && bWordsRemaining.contains(w.bWord)) {
                     score += w.score;
                     aWordsRemaining.remove(w.aWord);
